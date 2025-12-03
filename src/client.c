@@ -2,7 +2,10 @@
 
 int main(){
     int socketFD = createSocket();
-    struct sockaddr_in *address = createAddress("127.0.0.1", 80);
+    printf("enter the ip, leave it empty if you are using this locally: ");
+    char ip[100];
+    scanf("%100s", ip);
+    struct sockaddr_in *address = createAddress(ip, 80);
     int result = connect(socketFD, address, sizeof(*address));
     if(result == 0)
         printf("connection was successful\n");
