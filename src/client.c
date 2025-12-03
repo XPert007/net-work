@@ -1,10 +1,17 @@
 #include "../include/cns.h"
+#include <string.h>
 
 int main(){
     int socketFD = createSocket();
+
     printf("enter the ip, leave it empty if you are using this locally: ");
     char ip[100];
-    scanf("%100s", ip);
+    fgets(ip, sizeof(ip), stdin);
+    ip[strcspn(ip, "\n")] = 0;
+
+    if(strlen(ip) == 0)
+        strcpy(ip, "127.0.0.1");
+
     struct sockaddr_in *address = createAddress(ip, 80);
     int result = connect(socketFD, address, sizeof(*address));
     if(result == 0)
@@ -18,10 +25,15 @@ int main(){
         send(socketFD, message, strlen(message), 0);
 
         char buffer[1024];
-        recv(socketFD, buffer, sizeof(buffer), 0);
+        int bytes = recv(socketFD, buffer, sizeof(buffer)-1, 0);
+        if(bytes <= 0)
+            break;
+        buffer[bytes] = 0;
+
         printf("server replied: %s", buffer);
     }
 
     return 0;
 }
+
 
