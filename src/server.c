@@ -2,7 +2,7 @@
 
 int main(){
     int serverSocketFD = createSocket();
-    struct sockaddr_in *serverAddress = createAddress("", 80);
+    struct sockaddr_in *serverAddress = createAddress("0.0.0.0", 80);
     int result = bind(serverSocketFD, serverAddress, sizeof(*serverAddress));
     if(result == 0)
         printf("socket was bound successfully\n");
